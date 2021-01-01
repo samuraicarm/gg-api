@@ -2,11 +2,11 @@
   "name": "good-games-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "mocha --require test/setup.js",
     "dev": "nodemon src/server.js",
-    "start": "node src/server.js",
+    "start": "nodemon app",
     "predeploy": "npm audit",
     "deploy": "git push heroku master"
   },
