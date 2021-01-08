@@ -79,6 +79,10 @@ app.patch("playlist/:id"),
   (req, res) => {
     const { favorite, played } = req.body;
     const gametoUpdate = { favorite, played };
+
+    //if  favorite is true, change to false
+
+    //if played is false, change to true
   };
 
 app.get("/played", (req, res) => {
@@ -108,6 +112,14 @@ app.delete("played/:id", (req, res) => {
 
   res.send("Removed");
 });
+
+app.patch("played/:id"),
+  (req, res) => {
+    const { favorite, played } = req.body;
+    const gametoUpdate = { favorite };
+
+    //if  favorite is true, change to false
+  };
 
 app.get("/add", (req, res) => {});
 
