@@ -4,7 +4,7 @@ CREATE TABLE goodgames_list (
     game_name TEXT not null, 
     playlist BOOLEAN not null,
     played BOOLEAN not null,
-    favorite BOOLEAN not null
-    userid FOREIGN KEY REFERENCES goodgames_user(id)
+    favorite BOOLEAN not null,
+    userid INTEGER FOREIGN KEY REFERENCES goodgames_user(id)
 )
 
