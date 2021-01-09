@@ -3,6 +3,16 @@ const GamesService = require("./games-service");
 const gamesRouter = express.Router();
 const jsonParser = express.json();
 const path = require("path");
+const axios = require("axios");
+const axiosconfig = require("./axiosconfig");
+
+axios(axiosconfig)
+  .then(function (response) {
+    console.log(JSON.stringify(response.data));
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
 
 //does the homepage need to be here?
 app.get("/", (req, res) => {
@@ -10,21 +20,8 @@ app.get("/", (req, res) => {
 });
 
 gamesRouter
-  .get("/add", (req, res) => {
-    const { search = " ", sort } = req.query;
-
-    let results = games.filter((game) =>
-      game.name.toLowerCase().includes(search.toLowerCase())
-    );
-
-    if (sort) {
-      results.sort((a, b) => {
-        return a[sort] > b[sort] ? 1 : a[sort] < b[sort] ? -1 : 0;
-      });
-    }
-
-    res.json(games);
-  })
+  .route("/")
+  .get("/add", (req, res) => {})
   .post(jsonParser, (req, res, next) => {
     const { game_name, game_url } = req.body;
     const newGame = { game_name, game_url };
