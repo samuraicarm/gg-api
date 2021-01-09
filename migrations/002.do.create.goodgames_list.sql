@@ -3,9 +3,9 @@ CREATE TABLE goodgames_list (
     game_id INTEGER,
     game_name TEXT not null, 
     game_url TEXT not null,
-    playlist BOOLEAN not null,
-    played BOOLEAN not null,
-    favorite BOOLEAN not null,
+    playlist BOOLEAN,
+    played BOOLEAN,
+    favorite BOOLEAN,
     userid INTEGER REFERENCES goodgames_users(id)
 )
 
