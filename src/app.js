@@ -3,25 +3,20 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
+
 const { NODE_ENV } = require("./config");
-const {};
-const { v4: uuid } = require("uuid");
+
 const app = express();
-const usersRouter = "./users/user-router";
+const usersRouter = require("./users/user-router");
+const gamesRouter = require("./games/games-router");
 
 const morganOption = NODE_ENV === "production" ? "tiny" : "common";
 
 app.use(morgan(morganOption));
+app.use(cors());
 app.use(helmet());
-app.user("/api/users", usersRouter);
-
-app.get("/login", (req, res) => {});
-
-app.get("/signup", (req, res) => {});
-
-app.listen(8000, () => {
-  console.log("Server started on PORT 8000");
-});
+//app.use("/api/users", usersRouter);
+app.use("/api/games", gamesRouter);
 
 app.use(function errorHandler(error, req, res, next) {
   let response;
@@ -33,7 +28,5 @@ app.use(function errorHandler(error, req, res, next) {
   }
   res.status(500).json(response);
 });
-
-app.use(cors());
 
 module.exports = app;
