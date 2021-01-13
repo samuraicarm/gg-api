@@ -15,7 +15,7 @@ const morganOption = NODE_ENV === "production" ? "tiny" : "common";
 app.use(morgan(morganOption));
 app.use(cors());
 app.use(helmet());
-//app.use("/api/users", usersRouter);
+app.use("/api/users", usersRouter);
 app.use("/api/games", gamesRouter);
 
 app.use(function errorHandler(error, req, res, next) {

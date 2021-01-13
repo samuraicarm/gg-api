@@ -6,7 +6,7 @@ const jsonParser = express.json();
 const axios = require("axios");
 
 gamesRouter
-  .route("/games")
+  .route("games")
   .get((req, res) => {
     const config = {
       method: "get",
