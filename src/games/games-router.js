@@ -6,7 +6,7 @@ const jsonParser = express.json();
 const axios = require("axios");
 
 gamesRouter
-  .route("/")
+  .route("/games")
   .get((req, res) => {
     const config = {
       method: "get",
@@ -37,6 +37,14 @@ gamesRouter
       })
       .catch(next);
   });
+
+gamesRouter.route("/list").get((req, res) => {
+  GamesService.getAllGames(req.app.get("db"))
+    .then((games) => {
+      res.json(games);
+    })
+    .catch(next);
+});
 
 gamesRouter
   .route("/:id")
@@ -93,6 +101,15 @@ gamesRouter.route("/played").get((req, res) => {
   GamesService.getByPlayed(req.app.get("db"), req.user.id)
     .then((games) => {
       res.json(games);
+    })
+    .catch(next);
+});
+
+gamesRouter.route("/list").get((req, res, next) => {
+  const knexInstance = req.app.get("db");
+  GamesService.getAllGamesByUserId(knexInstance)
+    .then((goodgames_list) => {
+      res.json(goodgames_list);
     })
     .catch(next);
 });

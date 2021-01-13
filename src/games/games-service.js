@@ -2,7 +2,10 @@ const GamesService = {
   getAllGames(knex) {
     return knex.select("*").from("goodgames_list");
   },
-  getByUserId(knex, userid) {
+  getAllGamesByUserId(knex) {
+    return knex.select("*").from("goodgames_list");
+  },
+  getGamesByUserId(knex, userid) {
     return knex.select("*").from("goodgames_list").where({ userid });
   },
   insertGame(knex, newGame) {
@@ -14,6 +17,7 @@ const GamesService = {
         return rows[0];
       });
   },
+
   getByPlayList(knex, userid) {
     return knex
       .from("games")
