@@ -3,20 +3,58 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
-
 const { NODE_ENV } = require("./config");
-
-const app = express();
-const usersRouter = require("./users/user-router");
 const gamesRouter = require("./games/games-router");
 
-const morganOption = NODE_ENV === "production" ? "tiny" : "common";
+const app = express();
 
-app.use(morgan(morganOption));
+app.use(
+  morgan(NODE_ENV === "production" ? "tiny" : "common", {
+    skip: () => NODE_ENV === "test",
+  })
+);
+
 app.use(cors());
 app.use(helmet());
-app.use("/api/users", usersRouter);
-app.use("/api/games", gamesRouter);
+
+app.use(gamesRouter);
+
+app.get("/", (req, res) => {
+  res.send("Hello, boilerplate!");
+});
+
+/*
+app.get("/game", (req, res) => {
+  res.send("get game").json(cards);
+});
+
+app.get("/list", (req, res) => {
+  res.send("get game list").json(cards);
+});
+
+app.get("game/:id", (req, res) => {
+  const { id } = req.params;
+  const game = game.find((c) => c.id == id);
+
+  if (!game) {
+    logger.error(`Card with if ${id} not found`);
+    return res.status(404).send("Card Not Found");
+  }
+  res.json(game);
+});
+
+const logger = winston.createLogger({
+  level: "info",
+  format: winston.format.json(),
+  transports: [new winston.transports.File({ filename: "info.log" })],
+});
+if (NODE_ENV !== "production") {
+  logger.add(
+    new winston.transports.Console({
+      format: winston.format.simple(),
+    })
+  );
+}
 
 app.use(function errorHandler(error, req, res, next) {
   let response;
@@ -28,5 +66,6 @@ app.use(function errorHandler(error, req, res, next) {
   }
   res.status(500).json(response);
 });
+*/
 
 module.exports = app;
