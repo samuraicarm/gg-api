@@ -3,6 +3,8 @@ const GamesService = require("./games-service");
 const axios = require("axios");
 const gamesRouter = express.Router();
 
+//const { requireAuth } = require("../middleware/jwt-auth");
+
 gamesRouter.route("/api/list").get((req, res) => {
   const knexInstance = req.app.get("db");
   GamesService.getAllGames(knexInstance).then((games) => {

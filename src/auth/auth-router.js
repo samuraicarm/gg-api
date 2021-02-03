@@ -26,19 +26,20 @@ authRouter
         });
       }
       authService
-        .comparePasswords(userPassword, dbUser.userPassword)
+        .comparePasswords(userPassword, dbUser.userpassword)
         .then((isMatch) => {
           if (!isMatch) {
             return res.status(400).json({
               error: "incorrect email or password",
             });
           }
+
+          const subject = dbUser.username;
+          const payload = { user_id: dbUser.id };
+          res.send({
+            authToken: authService.createJwt(subject, payload),
+          });
         });
-      const subject = dbUser.username;
-      const payload = { user_id: dbUser.id };
-      res.send({
-        authToke: authService.createJWT(),
-      });
     });
   });
 
