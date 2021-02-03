@@ -1,16 +1,26 @@
-const UsersService = {
-  getAllUsers(knex) {
-    return knex.select("*").from("goodgames_users");
-  },
+const knex = require("knex");
+const bcrypt = require("bcryptjs");
 
+const usersService = {
+  hasUserWithUsername(knex, username) {
+    return knex("goodgames_users")
+      .where({ username })
+      .first()
+      .then((user) => !!user);
+  },
   insertUser(knex, newUser) {
     return knex
       .insert(newUser)
       .into("goodgames_users")
       .returning("*")
-      .then((rows) => {
-        return rows[0];
-      });
+      .then((rows) => rows[0]);
+  },
+  hashPassword(userpassword) {
+    return bcrypt.hash(userpassword, 12);
+  },
+
+  getAllUsers(knex) {
+    return knex.select("*").from("goodgames_users");
   },
 
   getById(knex, id) {
@@ -22,4 +32,4 @@ const UsersService = {
   },
 };
 
-module.exports = UsersService;
+module.exports = usersService;
