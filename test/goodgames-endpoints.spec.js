@@ -14,14 +14,14 @@ describe.only("Goodgames Endpoints", function () {
 
   after("disconnect from db", () => db.destroy());
 
-  before("clean the table", () => db("goodgames").truncate());
+  before("clean the table", () => db("goodgames_list").truncate());
 
-  afterEach("cleanup", () => db("goodgames").truncate());
+  afterEach("cleanup", () => db("goodgames_list").truncate());
 
-  describe(`GET /api/goodgames`, () => {
+  describe(`GET /api/list`, () => {
     context(`Given no goodgames`, () => {
       it(`responds with 200 and an empty list`, () => {
-        return supertest(app).get("/api/goodgames").expect(200, []);
+        return supertest(app).get("/api/list").expect(200, []);
       });
       context("Given there are goodgames in the database", () => {
         const testGoodgames = makeGoodgamesArray();
@@ -31,9 +31,7 @@ describe.only("Goodgames Endpoints", function () {
         });
 
         it("responds with 200 and all of the goodgames", () => {
-          return supertest(app)
-            .get("/api/goodgames")
-            .expect(200, testGoodgames);
+          return supertest(app).get("/api/list").expect(200, testGoodgames);
         });
       });
     });
@@ -62,7 +60,7 @@ describe.only("Goodgames Endpoints", function () {
       });
     });
 
-    describe.only(`POST /goodgames/add`, () => {
+    describe.only(`POST /api/list`, () => {
       it(`creates a game, responding with 201 and the new bookmark`, function () {
         this.retries(3);
         const newGame = {
@@ -70,16 +68,14 @@ describe.only("Goodgames Endpoints", function () {
           game_url: "http://www.game.com",
         };
         return supertest(app)
-          .post("/api/goodgames/add")
+          .post("/api/list")
           .send(newGame)
           .expect(201)
           .expect((res) => {
             expect(res.body.title).to.eql(newGame.game_name);
             expect(res.body.url).to.eql(newGame.game_url);
             expect(res.body).to.have.property("id");
-            expect(res.headers.location).to.eql(
-              `/api/goodgames/add/${res.body.id}`
-            );
+            expect(res.headers.location).to.eql(`/api/list.${res.body.id}`);
             const expected = new Date().toLocaleString("en", {
               timeZone: "UTC",
             });
@@ -103,7 +99,7 @@ describe.only("Goodgames Endpoints", function () {
         delete newGame[field];
 
         return supertest(app)
-          .post("/api/goodgames/add")
+          .post("/api/list")
           .send(newGame)
           .expect(400, {
             error: { message: `Missing '${field}' in request body` },
@@ -118,7 +114,7 @@ describe.only("Goodgames Endpoints", function () {
         it(`responds with 404`, () => {
           const gameId = 123456;
           return supertest(app)
-            .patch(`/api/goodgames/playlist/${gameId}`)
+            .patch(`/api/goodgames/list`)
             .expect(404, { error: { message: `playlist item doesn't exist` } });
         });
       });
@@ -142,20 +138,16 @@ describe.only("Goodgames Endpoints", function () {
           ...updateGame,
         };
         return supertest(app)
-          .patch(`/api/goodgames/playlist/${idToUpdate}`)
+          .patch(`/api/list`)
           .send(updateGame)
           .expect(204)
-          .then((res) =>
-            supertest(app)
-              .get(`/api/goodgames/playlist/${idToUpdate}`)
-              .expect(expectedGame)
-          );
+          .then((res) => supertest(app).get(`/api/list`).expect(expectedGame));
       });
 
       it(`responds with 400 when no required fields supplied`, () => {
         const idToUpdate = 2;
         return supertest(app)
-          .patch(`/api/goodgames/playlist/${idToUpdate}`)
+          .patch(`/api/list/${idToUpdate}`)
           .send({ irrelevantField: " 1 " })
           .expect(400, {
             error: {
@@ -175,16 +167,14 @@ describe.only("Goodgames Endpoints", function () {
         };
 
         return supertest(app)
-          .patch(`/api/goodgames/playlist/${idToUpdate}`)
+          .patch(`/api/list/${idToUpdate}`)
           .send({
             ...updateGame,
             fieldToIgnore: "should not be in GET response",
           })
           .expect(204)
           .then((res) =>
-            supertest(app)
-              .get(`/api/goodgames/playlist/${idToUpdate}`)
-              .expect(expectedGame)
+            supertest(app).get(`/api/list/${idToUpdate}`).expect(expectedGame)
           );
       });
     });
@@ -193,7 +183,7 @@ describe.only("Goodgames Endpoints", function () {
       it(`responds with 404`, () => {
         const gameId = 123456;
         return supertest(app)
-          .delete(`/api/goodgames/playlist/${gameId}`)
+          .delete(`/api/list/${game_id}`)
           .expect(404, { error: { message: `Game doesn't exist` } });
       });
     });
@@ -202,7 +192,7 @@ describe.only("Goodgames Endpoints", function () {
       const testGoodgames = makeGoodgamesArray();
 
       beforeEach("insert goodgames", () => {
-        return db.into("goodgames").insert(testGoodgames);
+        return db.into("goodgames_list").insert(testGoodgames);
       });
 
       it("responds with 204 and removes the game", () => {
