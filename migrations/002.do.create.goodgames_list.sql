@@ -1,5 +1,6 @@
+
 CREATE TABLE goodgames_list (
-    id INTEGER PRIMARY KEY,
+          id INTEGER PRIMARY KEY,
     game_name TEXT not null, 
     image_id TEXT not null,
     playlist BOOLEAN,
