@@ -6,5 +6,5 @@ CREATE TABLE goodgames_list (
     played BOOLEAN,
     favorite BOOLEAN,
     userid INTEGER REFERENCES goodgames_users(id)
-)
+);
 
