@@ -16,18 +16,18 @@ gamesRouter
   })
   .post(jsonParser, (req, res, next) => {
     const {
-      game_id,
+      id,
       game_name,
-      game_url,
+      image_id,
       playlist,
       played,
       favorite,
       userid,
     } = req.body;
     const newGame = {
-      game_id,
+      id,
       game_name,
-      game_url,
+      image_id,
       playlist,
       played,
       favorite,
@@ -40,7 +40,7 @@ gamesRouter
       .catch(next);
   })
   .delete((req, res, next) => {
-    GamesService.deleteGame(req.app.get("db"), req.params.game_id)
+    GamesService.deleteGame(req.app.get("db"), req.params.id)
       .then(() => {
         res.status(204).end();
       })
